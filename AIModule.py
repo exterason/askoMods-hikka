@@ -82,7 +82,7 @@ class AIModule(loader.Module):
 
         if provider == "gemini":
             if not genai:
-                await utils.answer(None, self.strings["missing_library"].format("Gemini", "google-generativeai"))
+                logger.warning(self.strings["missing_library"].format("Gemini", "google-generativeai"))
                 return
             genai.configure(api_key=api_key)
             self.model = genai.GenerativeModel(
@@ -91,7 +91,7 @@ class AIModule(loader.Module):
             )
         elif provider == "openai":
             if not openai:
-                await utils.answer(None, self.strings["missing_library"].format("OpenAI", "openai"))
+                logger.warning(self.strings["missing_library"].format("OpenAI", "openai"))
                 return
             self.ai_client = openai.AsyncOpenAI(api_key=api_key)
             self.model = model  # Для OpenAI модель указывается в запросе
@@ -140,3 +140,6 @@ class AIModule(loader.Module):
                 file.name = "ai_response.txt"
                 await message.client.send_file(message.to_id, file, reply_to=message)
             else:
+                await utils.answer(message, text)
+        except Exception as e:
+            await utils.answer(message, self.strings["error"].format(str(e)))
