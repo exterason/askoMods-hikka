@@ -42,7 +42,7 @@ class ImageToGifModule(loader.Module):
         )
 
     async def img2gifcmd(self, message):
-        """Конвертировать изображение в GIF: ответьте на фото командой .img2gif"""
+        """Ответьте на фото для использования команды."""
         if not message.is_reply:
             await utils.answer(message, self.strings["no_image"])
             return
