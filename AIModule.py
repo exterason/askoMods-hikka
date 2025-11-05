@@ -1,5 +1,6 @@
 import asyncio
 import io
+import logging
 from .. import loader, utils
 
 try:
@@ -11,6 +12,8 @@ try:
     import openai
 except ImportError:
     openai = None
+
+logger = logging.getLogger(__name__)
 
 @loader.tds
 class AIModule(loader.Module):
@@ -137,6 +140,3 @@ class AIModule(loader.Module):
                 file.name = "ai_response.txt"
                 await message.client.send_file(message.to_id, file, reply_to=message)
             else:
-                await utils.answer(message, text)
-        except Exception as e:
-            await utils.answer(message, self.strings["error"].format(str(e)))
